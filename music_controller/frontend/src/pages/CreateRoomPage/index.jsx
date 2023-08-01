@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   FormControlLabel,
   FormHelperText,
@@ -15,6 +15,34 @@ import { Link } from "react-router-dom";
 const CreateRoomPage = () => {
   const defaultVotes = 2;
 
+  //use of useState hooks to define state
+  const [guestCanPause, setGuestCanPause] = useState(true);
+  const [votesToSkip, setVotesToSkip] = useState(defaultVotes);
+  const [roomButtonPressed, setRoomButtonPressed] = useState("");
+
+  //methods section
+  const handleVotesChange = (e) => {
+    setVotesToSkip(e.target.value);
+  };
+
+  const handleGuestCanPauseChange = (e) => {
+    setGuestCanPause(e.target.value === true);
+  };
+
+  const handleRoomButtonPressed = () => {
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        votes_to_skip: votesToSkip,
+        guest_can_pause: guestCanPause,
+      }),
+    };
+    fetch("http://127.0.0.1:8000/api/create/", requestOptions)
+      .then((response) => response.json())
+      .then((data) => console.log(data));
+  };
+
   return (
     <>
       <Grid container spacing={1}>
@@ -29,7 +57,11 @@ const CreateRoomPage = () => {
               <div align="center">Guest Control of Playback state</div>
             </FormHelperText>
             <div style={{ display: "flex", justifyContent: "center" }}>
-              <RadioGroup row defaultValue="true">
+              <RadioGroup
+                row
+                defaultValue="true"
+                onChange={handleGuestCanPauseChange}
+              >
                 <FormControlLabel
                   value="true"
                   control={<Radio color="primary" />}
@@ -52,6 +84,7 @@ const CreateRoomPage = () => {
               required={true}
               type="number"
               defaultValue={defaultVotes}
+              onChange={handleVotesChange}
               inputProps={{ min: 1, style: { textAlign: "center" } }}
             />
             <FormHelperText>
@@ -60,7 +93,11 @@ const CreateRoomPage = () => {
           </FormControl>
         </Grid>
         <Grid item xs={12} align="center">
-          <Button color="primary" variant="contained">
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={handleRoomButtonPressed}
+          >
             Create A Room
           </Button>
         </Grid>
