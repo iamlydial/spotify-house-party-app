@@ -10,8 +10,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/create-room" element={<CreateRoomPage />} />
-          <Route path="/join-room" element={<JoinRoomPage />} />
+          <Route path="/create" element={<CreateRoomPage />} />
+          <Route path="/join" element={<JoinRoomPage />} />
         </Routes>
       </BrowserRouter>
     </>
