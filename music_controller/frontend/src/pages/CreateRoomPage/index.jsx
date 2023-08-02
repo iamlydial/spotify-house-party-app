@@ -11,9 +11,11 @@ import {
   FormControl,
 } from "@mui/material";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const CreateRoomPage = () => {
   const defaultVotes = 2;
+  const navigate = useNavigate();
 
   //use of useState hooks to define state
   const [guestCanPause, setGuestCanPause] = useState(true);
@@ -40,7 +42,10 @@ const CreateRoomPage = () => {
     };
     fetch("http://127.0.0.1:8000/api/create/", requestOptions)
       .then((response) => response.json())
-      .then((data) => console.log(data));
+      .then((data) => {
+        console.log(data); // Optional: You can log the response data if needed
+        navigate("/room/" + data.code); // Redirect to the newly created room page
+      });
   };
 
   return (
