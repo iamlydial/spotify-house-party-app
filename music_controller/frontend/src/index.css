@@ -1,0 +1,13 @@
+#root {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.main-grid {
+  border: solid;
+  display: flex;
+  align-items: center;
+  height: 50vh;
+}

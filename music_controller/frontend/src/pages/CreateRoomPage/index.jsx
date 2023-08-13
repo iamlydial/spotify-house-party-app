@@ -50,7 +50,7 @@ const CreateRoomPage = () => {
 
   return (
     <>
-      <Grid container spacing={1}>
+      <Grid className="main-grid" container spacing={1}>
         <Grid item xs={12} align="center">
           <Typography component="h4" variant="h4">
             Create a Room
@@ -61,7 +61,12 @@ const CreateRoomPage = () => {
             <FormHelperText>
               <div align="center">Guest Control of Playback state</div>
             </FormHelperText>
-            <div style={{ display: "flex", justifyContent: "center" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
               <RadioGroup
                 row
                 defaultValue="true"
