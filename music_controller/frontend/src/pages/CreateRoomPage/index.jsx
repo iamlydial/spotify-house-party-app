@@ -28,7 +28,7 @@ const CreateRoomPage = () => {
   };
 
   const handleGuestCanPauseChange = (e) => {
-    setGuestCanPause(e.target.value === true);
+    setGuestCanPause(e.target.value === "true");
   };
 
   const handleRoomButtonPressed = () => {
@@ -40,11 +40,20 @@ const CreateRoomPage = () => {
         guest_can_pause: guestCanPause,
       }),
     };
+    // After creating the room
     fetch("http://127.0.0.1:8000/api/create/", requestOptions)
       .then((response) => response.json())
       .then((data) => {
         console.log(data); // Optional: You can log the response data if needed
-        navigate("/room/" + data.code); // Redirect to the newly created room page
+        // Make another API call to get the room details
+        fetch(`http://127.0.0.1:8000/api/get-room/?roomCode=${data.code}`)
+          .then((response) => response.json())
+          .then((roomData) => {
+            console.log(roomData);
+            // Now you can use roomData.is_host to determine if you're the host
+            // and then navigate to the room page
+            navigate("/room/" + data.code);
+          });
       });
   };
 

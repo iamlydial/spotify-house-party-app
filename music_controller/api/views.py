@@ -6,14 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-
-@api_view(['GET'])
-def get_user_id(request):
-    if request.user.is_authenticated:
-        user_id = request.user.id
-        return Response({'user_id': user_id})
-    else:
-        return Response({'error': 'User not authenticated'}, status=401)
+from django.http import JsonResponse
 
 # Create your views here.
 class RoomView(generics.ListAPIView):
@@ -27,6 +20,11 @@ class GetRoom(APIView):
 
     print("hello")
     def get(self, request, format=None):
+        print("Before Session Create:", request.session.session_key)
+        if not request.session.exists(request.session.session_key):
+            request.session.create()
+        print("After Session Create:", request.session.session_key)
+
         code = request.GET.get(self.lookup_url_kwarg)
         if code is not None: 
             try:
@@ -44,8 +42,10 @@ class JoinRoom(APIView):
     lookup_url_kwarg = 'code'
 
     def post(self, request, format=None):
-        if not self.request.session.exists(self.request.session.session_key):
-            self.request.session.create()
+        print("Before Session Create:", request.session.session_key)
+        if not request.session.exists(request.session.session_key):
+            request.session.create()
+        print("After Session Create:", request.session.session_key)
         
         code = request.data.get(self.lookup_url_kwarg)
         if code != None: 
@@ -62,8 +62,10 @@ class CreateRoomView(APIView):
     serializer_class = CreateRoomSerializer
 
     def post(self, request, format=None):
-        if not self.request.session.exists(self.request.session.session_key):
-            self.request.session.create()
+        print("Before Session Create:", request.session.session_key)
+        if not request.session.exists(request.session.session_key):
+            request.session.create()
+        print("After Session Create:", request.session.session_key)
 
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
@@ -86,3 +88,16 @@ class CreateRoomView(APIView):
                 return Response(RoomSerializer(room).data, status=status.HTTP_201_CREATED)
 
         return Response({'Bad Request': 'Invalid data...'}, status=status.HTTP_400_BAD_REQUEST)
+    
+class UserInRoomView(APIView):
+    def get(self, request, format=None):
+        print("Before Session Create:", request.session.session_key)
+        if not request.session.exists(request.session.session_key):
+            request.session.create()
+        print("After Session Create:", request.session.session_key)
+
+        data = {
+            'code': self.request.session.get('room_code')
+        }
+
+        return JsonResponse(data, status=status.HTTP_200_OK)
