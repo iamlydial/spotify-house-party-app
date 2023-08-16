@@ -6,7 +6,7 @@
 }
 
 .main-grid {
-  border: solid;
+  /* border: solid; */
   display: flex;
   align-items: center;
   height: 50vh;
