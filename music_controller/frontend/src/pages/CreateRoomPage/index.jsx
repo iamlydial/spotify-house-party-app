@@ -49,7 +49,7 @@ const CreateRoomPage = () => {
         fetch(`http://127.0.0.1:8000/api/get-room/?roomCode=${data.code}`)
           .then((response) => response.json())
           .then((roomData) => {
-            console.log(roomData);
+            console.log("Room data", roomData);
             // Now you can use roomData.is_host to determine if you're the host
             // and then navigate to the room page
             navigate("/room/" + data.code);
