@@ -11,7 +11,14 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/create" element={<CreateRoomPage />} />
+          <Route
+            path="/create"
+            element={
+              <CreateRoomPage
+                updateData={{ guest_can_pause: true, votes_to_skip: 2 }}
+              />
+            }
+          />
           <Route path="/join" element={<JoinRoomPage />} />
           <Route path="/room/:roomCode" element={<RoomPage />} />
           <Route path="/get-room/:roomCode" element={<RoomPage />} />
